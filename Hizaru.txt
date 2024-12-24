@@ -189,9 +189,6 @@ SELECT m.title AS movie, COUNT(r.movie_id) AS no_of_times_rented FROM movies m J
 
 
 
-
-
-
  CREATE INDEX type_index ON transactions(type);
 UPDATE customers SET balance = balance + ( SELECT SUM(t.amount) FROM transactions t WHERE t.account_no = customers.account_no AND t.type = "Deposit" AND t.amount > 100000
 SELECT c.name, SUM(t.amount) AS total_transaction_amount FROM customers c JOIN transactions t ON c.account_no = t.account_no GROUP BY c.name;
@@ -202,6 +199,130 @@ ALTER TABLE customers MODIFY COLUMN phone VARCHAR(15) NOT NULL;
 SELECT c.customer_id, c.name, c.account_no, c.phone, c.balance FROM customers c JOIN transactions t ON c.account_no = t.account_no WHERE t.amount > 100000;
 SELECT c.name, SUM(t.amount) AS total_transaction_amounts FROM customers c JOIN transactions t ON c.account_no = t.account_no GROUP BY c.name;
 DELETE FROM customers WHERE account_no NOT IN ( SELECT DISTINCT account_no FROM transactions WHERE transaction_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+
+
+
+
+SET Name :B
+
+create database Exam;
+use Exam;
+
+create table Property(pno int primary key,p_desc varchar(100),area varchar(100) ,rate int);
+desc Property;
+create table owner(pno int,owener_name varchar(100) primary key,city varchar(100),phno varchar(100),foreign key(pno) references Property(pno));
+desc owner;
+insert into Property(pno,p_desc,area,rate) values(1,'2BHK','Mumbai',50000),(2,'1BHK','Pune',300000),(3,'1RK','Satara',20000),(4,'ROOM','Baramati',10000);
+
+SELECT * FROM Property;
+insert into owner(pno,owener_name,city,phno)values(1,'Mr.Patil','Mumbai',8446082945),(2,'Mr.Joshi','Pune',9881762951),(3,'Mr.Jadhav','Kolhapur',7653423567),(4,'Mr.Shreyas','Baramati',9881762951);
+
+Q1
+select * from Property where area='Pune';
+
+Q2
+select * from
+Property as p
+join owner as o
+on p.pno=o.pno
+where o.owener_name='Mr.Patil' and (select min(Property.rate) from Property);
+
+Q3 
+select owener_name,max(pno) from owner
+group by owener_name limit 1;
+
+Q4.
+select * from
+Property as p
+join owner as o
+on p.pno=o.pno
+where o.owener_name='Mr.Patil';
+
+Q5.
+delete  from Property where area='pune' AND owener_name='Mr.Joshi';
+
+-------------------------------------------MONGODB------------------------------------------
+
+test> use Inventory
+switched to db Inventory
+Inventory> db.createCollection('Items')
+{ ok: 1 }
+Inventory> db.Items.insertMany([
+...     {ID:1,Name:'Fan',category:'Electronics',Price:5000,quantity:2,instock:True},
+...     {ID:2,Name:'Laptop',category:'Electronics',Price:50000,quantity:5,instock:False},
+...     {ID:3,Name:'Mixer',category:'HomeAppliances',Price:2000,quantity:2,instock:True},
+...     {ID:4,Name:'Chair',category:'HomeAppliances',Price:500,quantity:4,instock:True}
+... ]);
+ReferenceError: True is not defined
+Inventory> db.Items.insertMany([
+...     {ID:1,Name:'Fan',category:'Electronics',Price:5000,quantity:2,instock:true},
+...     {ID:2,Name:'Laptop',category:'Electronics',Price:50000,quantity:5,instock:false},
+...     {ID:3,Name:'Mixer',category:'HomeAppliances',Price:2000,quantity:2,instock:true},
+...     {ID:4,Name:'Chair',category:'HomeAppliances',Price:500,quantity:4,instock:true}
+... ]);
+1.
+db.Items.find({category:'Electronics'})
+
+-2.
+db.Items.find({instock:true})
+
+-3.
+db.Items.updateOne({Name:'Laptop'},{$set:{Price:80000}})
+
+-4.
+db.Items.updateOne({Name:'Chair'},{$inc:{quantity:50}})
+
+-5.
+db.Items.find({Price:{$gt:2000,$lt:10000}})
+
+--------------------------------------Graph Database-----------------------------------------
+1.
+CREATE (c1:Club { title: 'Art Club'}) 
+CREATE (b2:Club {title: 'Chess Club'})
+CREATE (b3:Club {title: 'Sports Club' })
+
+-2.
+CREATE (s1:Student {name: 'Amy'}) 
+CREATE (s2:Student {name: 'Ben'})
+CREATE (s3:Student {name: 'Chris'})
+CREATE (s4:Student {name: 'Diana'})
+
+-3.
+MATCH 
+    (m1:Student{name: 'Amy'}), 
+    (c1:Club { title: 'Art Club'}) 
+CREATE (m1)-[:President]->(c1) 
+MATCH 
+    (m1:Student{name: 'Amy'}), 
+    (c1:Club { title: 'Chess Club'}) 
+CREATE (m1)-[:Member]->(c1)
+
+-4.
+
+MATCH 
+    (m2:Student{name: 'Ben'}), 
+    (c2:Club { title: 'Sports Club'}) 
+CREATE (m2)-[:Member]->(c2)
+
+5.
+MATCH 
+    (m3:Student{name: Chris}), 
+    (c3:Club { title: ‘Chess Club'}) 
+CREATE (m3)-[: President]->(c3)
+
+6.
+MATCH 
+    (m3:Student{name: 'Diana'}), 
+    (c1:Club { title: 'Art Club'}) 
+CREATE (m3)-[:Member]->(c1) 
+MATCH 
+    (m3:Student{name: 'Diana'}), 
+    (c3:Club { title: 'Sports Club'}) 
+CREATE (m3)-[:Member]->(c3)
+
+
+
+
 
 SET C
 
