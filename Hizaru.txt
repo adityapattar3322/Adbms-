@@ -202,6 +202,63 @@ DELETE FROM customers WHERE account_no NOT IN ( SELECT DISTINCT account_no FROM 
 
 
 
+SET Name  A
+
+
+Q1
+1.SELECT * FROM sales WHERE total_price>100;
+
+2. SELECT sale_id,total_price,sale_date 
+FROM sales 
+WHERE sale_date="2024-01-03";
+
+3. SELECT sale_id,product_id,total_price 
+FROM sales 
+WHERE quantity_sold>4;
+
+4. SELECT category,AVG(unit_price) AS average_price 
+FROM products 
+GROUP BY(category);
+
+5. SELECT 
+s.sale_id,s.total_price,s.sale_date,p.product_name 
+FROM sales AS s JOIN PRODUCTS AS p 
+ON s.product_id=p.product_id;
+
+
+MONGODB----------------------------
+
+1.	db.Scientist.find({DOB:{$gt:"1970-01-01"}})
+
+2.	db.Scientist.find({Reasearch_area:"physics"})
+
+3.    db.Scientist.find({awards:"turing award"})
+
+5.    db.Scientist.find().skip(3).limit(5);
+
+
+
+GRAPH
+
+Q3 
+1.	create (d1:Dishes{name:"Pizza"})
+create (d2:Dishes{name:"Burger"})
+create (d3:Dishes{name:"Pasta"})
+
+2.create(c1:Customer{name:"Alex"})
+create(c2:Customer{name:"Emma"})
+create(c3:Customer{name:"Tom"})
+
+3.match(u:Customer{name:"Alex"}),(d1:Dishes{name:"Burger"}),(d2:Dishes{name:"Pizza"}) 
+create(u)-[:ORDERED{time:"10am",price:"100",quantity:2}]->(d1) 
+create(u)-[:ORDERED{time:"10am",price:"100",quantity:2}]->(d2)
+
+4.match(u:Customer{name:"Emma"}),(d1:Dishes{name:"Pasta"}),(d2:Dishes{name:"Pizza"}) 
+create(u)-[:ORDERED{time:"11am",price:"100",quantity:1}]->(d1) 
+
+5. match(u:Customer{name:"Tom"}),(d1:Dishes{name:"Pizza"}),(d2:Dishes{name:"Pizza"}) 
+create(u)-[:ORDERED{time:"12am",price:"200",quantity:1}]->(d1) 
+
 
 SET Name :B
 
